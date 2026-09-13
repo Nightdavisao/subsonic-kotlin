@@ -9,8 +9,17 @@ internal object UserSerializer : JsonTransformingSerializer<User>(User.generated
 
         val roles = listOf(
             "admin" to "adminRole",
+            "guest" to "guestRole",
             "settings" to "settingsRole",
+            "share" to "shareRole",
+            "upload" to "uploadRole",
+            "cover_art" to "coverArtRole",
+            "stream" to "streamRole",
+            "podcast" to "podcastRole",
+            "jukebox" to "jukeboxRole",
+            "playlist" to "playlistRole",
             "download" to "downloadRole",
+            "videoconversion" to "videoConversionRole",
             "upload" to "uploadRole"
         ).mapNotNull { (roleName, key) ->
             user[key]?.jsonPrimitive?.booleanOrNull
