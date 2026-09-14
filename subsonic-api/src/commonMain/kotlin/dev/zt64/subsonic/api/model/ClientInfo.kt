@@ -1,34 +1,78 @@
 package dev.zt64.subsonic.api.model
 
+import kotlinx.serialization.Serializable
 
-public data class CodecProfile internal constructor(
+
+/**
+ * Codec profile
+ * @property limitations List of limitations
+ * @property name Profile name
+ * @property type Codec type ("AudioCodec"?)
+ */
+@Serializable
+public data class CodecProfile(
     val limitations: List<Limitation>,
     val name: String,
     val type: String
 )
 
-public data class DirectPlayProfile internal constructor(
+/**
+ * Direct play profile
+ * @property audioCodecs List of supported audio codecs
+ * @property containers List of supported containers
+ * @property maxAudioChannels Maximum amount of audio channels
+ * @property protocols Supported transport protocols (HTTP, HLS...)
+ */
+@Serializable
+public data class DirectPlayProfile(
     val audioCodecs: List<String>,
     val containers: List<String>,
     val maxAudioChannels: Int,
     val protocols: List<String>
 )
 
-public data class TranscodingProfile internal constructor(
+/**
+ * Transcoding profile
+ * @property audioCodec Audio codec
+ * @property container Container for the codec
+ * @property maxAudioChannels Amount of maximum audio channels
+ * @property protocol Supported transport protocol (HTTP, HLS...)
+ */
+@Serializable
+public data class TranscodingProfile(
     val audioCodec: String,
     val container: String,
     val maxAudioChannels: Int,
     val protocol: String
 )
 
-public data class Limitation internal constructor(
+/**
+ * Limitation
+ * @property comparison Comparison
+ * @property name Limitation name
+ * @property required Whether is it required
+ * @property values Values
+ */
+@Serializable
+public data class Limitation(
     val comparison: String,
     val name: String,
     val required: Boolean,
     val values: List<String>
 )
 
-public data class ClientInfo internal constructor(
+/**
+ * Client information, generally used for providing information about supported codecs and containers for the server.
+ * `getTranscodeDecision` requires this information for yielding direct play and transcode profiles to the client.
+ * @property codecProfiles Codec profiles
+ * @property directPlayProfiles Direct play profiles
+ * @property maxAudioBitrate Maximum audio bitrate
+ * @property name Client name
+ * @property platform Platform name
+ * @property transcodingProfiles Transcoding profiles
+ */
+@Serializable
+public data class ClientInfo(
     val codecProfiles: List<CodecProfile>,
     val directPlayProfiles: List<DirectPlayProfile>,
     val maxAudioBitrate: Int,
