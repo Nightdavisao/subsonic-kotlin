@@ -42,4 +42,11 @@ jobs:
       - name: Build and Maven 'publish'
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: ./publish.sh
+        run: |
+          if [ -n "$GH_TOKEN" ]; then
+            echo "GH_TOKEN is set. Running publish script."
+            bash ./publish.sh
+          else
+            echo "GH_TOKEN is missing. Bailing out."
+            exit 1
+          fi
