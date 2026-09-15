@@ -44,8 +44,6 @@ jobs:
           restore-keys: "${{ runner.os }}-konan-"
 
       - name: Build and Maven 'publish'
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           if [ -n "$GH_TOKEN" ]; then
             echo "GH_TOKEN is set. Running publish script."
