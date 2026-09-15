@@ -12,14 +12,14 @@ cd "$SCRIPT_DIR"
 ./gradlew publishAllPublicationsToGithubRepository --stacktrace
 
 if [[ -n "$GH_TOKEN" ]]; then
+    MAVEN_REPO_GIT_REPO="https://x-access-token:$GH_TOKEN@github.com/Nightdavisao/maven-repo.git"
+    MAVEN_REPO_DIR="/tmp/maven-repo"
+
     echo "Copying all artifacts to maven-repo..."
     for module in "${MODULES[@]}"; do
         echo "Copying $module -> maven-repo..."
         cp -r "$SCRIPT_DIR/$module/build/maven-repo/"* "$MAVEN_REPO_DIR/"
     done
-
-    MAVEN_REPO_GIT_REPO="https://x-access-token:$GH_TOKEN@github.com/Nightdavisao/maven-repo.git"
-    MAVEN_REPO_DIR="/tmp/maven-repo"
 
     echo "Cloning maven git repo..."
     if [[ -n "$MAVEN_REPO_GIT_REPO" ]]; then
