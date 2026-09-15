@@ -40,4 +40,6 @@ jobs:
           restore-keys: "${{ runner.os }}-konan-"
 
       - name: Build and Maven 'publish'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: ./publish.sh
