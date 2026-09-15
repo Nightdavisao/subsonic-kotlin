@@ -7,8 +7,6 @@ PROJECT_VERSION=$(sed -n 's/.*version = "\(.*\)".*/\1/p' build.gradle.kts)
 MODULES=(subsonic-client subsonic-api)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
-
 echo "Building and publishing..."
 cd "$SCRIPT_DIR"
 ./gradlew publishAllPublicationsToGithubRepository --stacktrace
@@ -22,6 +20,12 @@ if [[ -n "$GH_TOKEN" ]]; then
 
     MAVEN_REPO_GIT_REPO="https://x-access-token:$GH_TOKEN@github.com/Nightdavisao/maven-repo.git"
     MAVEN_REPO_DIR="/tmp/maven-repo"
+
+    echo "Cloning maven git repo..."
+    if [[ -n "$MAVEN_REPO_GIT_REPO" ]]; then
+        rm -rf "$MAVEN_REPO_GIT_REPO"
+    fi
+    git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
 
     echo "Pushing to Git..."
     cd "$MAVEN_REPO_DIR"
