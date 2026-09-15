@@ -94,7 +94,7 @@ public data class Album internal constructor(
         val disc: Int,
         val title: String,
         @SerialName("coverArt")
-        val coverArtId: String
+        val coverArtId: String?
     )
 
     /**
