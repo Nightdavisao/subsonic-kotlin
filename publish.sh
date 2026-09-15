@@ -15,17 +15,17 @@ if [[ -n "$GH_TOKEN" ]]; then
     MAVEN_REPO_GIT_REPO="https://x-access-token:$GH_TOKEN@github.com/Nightdavisao/maven-repo.git"
     MAVEN_REPO_DIR="/tmp/maven-repo"
 
+    echo "Cloning maven git repo..."
+    if [[ -d "$MAVEN_REPO_GIT_REPO" ]]; then
+        rm -rf "$MAVEN_REPO_GIT_REPO"
+    fi
+    git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
+
     echo "Copying all artifacts to maven-repo..."
     for module in "${MODULES[@]}"; do
         echo "Copying $module -> maven-repo..."
         cp -r "$SCRIPT_DIR/$module/build/maven-repo/"* "$MAVEN_REPO_DIR/"
     done
-
-    echo "Cloning maven git repo..."
-    if [[ -n "$MAVEN_REPO_GIT_REPO" ]]; then
-        rm -rf "$MAVEN_REPO_GIT_REPO"
-    fi
-    git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
 
     echo "Pushing to Git..."
     cd "$MAVEN_REPO_DIR"
