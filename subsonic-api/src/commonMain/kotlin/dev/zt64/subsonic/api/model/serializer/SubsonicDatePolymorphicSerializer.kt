@@ -51,9 +51,9 @@ internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSeriali
         override fun deserialize(decoder: Decoder): LocalDate {
             val value = decoder.decodeSerializableValue(JsonElement.serializer()).jsonObject
             return LocalDate(
-                value["year"]!!.jsonPrimitive.int,
-                value["month"]!!.jsonPrimitive.int,
-                value["day"]!!.jsonPrimitive.int,
+                value["year"]?.jsonPrimitive?.int ?: 2000,
+                value["month"]?.jsonPrimitive?.int ?: 1,
+                value["day"]?.jsonPrimitive?.int ?: 1,
             )
         }
     }
