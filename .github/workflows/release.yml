@@ -1,10 +1,7 @@
 name: Publish release
 run-name: Publish release ${{ github.event.release.tag_name }}
 
-on:
-  workflow_dispatch:
-  release:
-    types: [ prereleased, released ]
+on: [workflow_dispatch, push]
 
 jobs:
   publish:
@@ -14,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.release.tag_name }}
 
       - name: Test version
         id: version

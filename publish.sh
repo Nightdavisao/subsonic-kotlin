@@ -14,8 +14,8 @@ fi
 git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
 
 echo "Setting git config..."
-git config user.name 'github-actions[bot]'
-git config user.email 'github-actions[bot]@users.noreply.github.com'
+git config --local user.name 'github-actions[bot]'
+git config --local user.email 'github-actions[bot]@users.noreply.github.com'
 
 echo "Building and publishing..."
 cd "$SCRIPT_DIR"
