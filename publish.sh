@@ -7,11 +7,6 @@ PROJECT_VERSION=$(sed -n 's/.*version = "\(.*\)".*/\1/p' build.gradle.kts)
 MODULES=(subsonic-client subsonic-api)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo "Cloning the maven 'repository'..."
-if [[ -n "$MAVEN_REPO_DIR" ]]; then
-    rm -rf "$MAVEN_REPO_DIR"
-fi
-
 git clone --depth=1 "$MAVEN_REPO_GIT_REPO" "$MAVEN_REPO_DIR"
 
 echo "Building and publishing..."
