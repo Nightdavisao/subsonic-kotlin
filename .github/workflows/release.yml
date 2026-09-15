@@ -1,7 +1,11 @@
 name: Publish release
 run-name: Publish release ${{ github.event.release.tag_name }}
 
-on: [workflow_dispatch, push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fork
 
 jobs:
   publish:
