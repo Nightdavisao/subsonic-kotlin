@@ -25,4 +25,12 @@ kotlin {
     }
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "github"
+            url = uri(layout.buildDirectory.dir("maven-repo"))
+        }
+    }
+}
 publish("subsonic-api")
