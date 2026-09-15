@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - fork
+env:
+  GH_TOKEN: ${{ vars.PAT_TOKEN }}
 
 jobs:
   publish:
