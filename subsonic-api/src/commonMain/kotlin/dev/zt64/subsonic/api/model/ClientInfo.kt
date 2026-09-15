@@ -79,7 +79,7 @@ public data class ClientInfo(
         @Serializable
         public data class Limitation(
             val comparison: LimitationComparison,
-            val name: String,
+            val name: LimitationName,
             val required: Boolean = true,
             val values: List<String>
         )
