@@ -5,7 +5,8 @@ import kotlinx.datetime.serializers.FormattedLocalDateSerializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
@@ -37,8 +38,10 @@ internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSeriali
     )
 
     private object NavidromeDateSerializer : KSerializer<LocalDate> {
-        override val descriptor: SerialDescriptor
-            get() = TODO("Not yet implemented")
+        override val descriptor = PrimitiveSerialDescriptor(
+            "dev.zt64.subsonic.api.model.serializer.NavidromeDateSerializer",
+            PrimitiveKind.STRING
+        )
 
         override fun serialize(
             encoder: Encoder,
