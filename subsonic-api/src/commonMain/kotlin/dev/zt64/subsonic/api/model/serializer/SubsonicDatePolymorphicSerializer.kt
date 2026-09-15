@@ -18,13 +18,11 @@ import kotlinx.serialization.json.jsonPrimitive
 internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSerializer<LocalDate>(LocalDate::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<LocalDate> {
         try {
-            if (element.jsonPrimitive.isString) {
-                return SubsonicDateSerializer
-            }
-        } catch (_: SerializationException) {
+            element.jsonObject
+            return SubsonicDateSerializer
+        } catch (_: IllegalArgumentException) {
             return NavidromeDateSerializer
         }
-        throw SerializationException("Unable to identify date format")
     }
 
     private object SubsonicDateSerializer : FormattedLocalDateSerializer(
