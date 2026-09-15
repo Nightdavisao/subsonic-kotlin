@@ -7,7 +7,7 @@ on:
     branches:
       - fork
 env:
-  GH_TOKEN: ${{ vars.PAT_TOKEN }}
+  GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
 jobs:
   publish:
