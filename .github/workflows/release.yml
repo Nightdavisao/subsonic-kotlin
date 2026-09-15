@@ -41,5 +41,5 @@ jobs:
 
       - name: Build and Maven 'publish'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: ./publish.sh
