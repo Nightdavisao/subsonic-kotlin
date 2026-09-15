@@ -1,6 +1,7 @@
 package dev.zt64.subsonic.api.model
 
 import dev.zt64.subsonic.api.model.serializer.GenresSerializer
+import dev.zt64.subsonic.api.model.serializer.SubsonicDatePolymorphicSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.serializers.LocalDateComponentSerializer
@@ -68,9 +69,9 @@ public data class Album internal constructor(
     val playCount: Int = 0,
     val userRating: Int? = null,
     val version: String? = null,
-    @Serializable(LocalDateComponentSerializer::class)
+    @Serializable(SubsonicDatePolymorphicSerializer::class)
     val originalReleaseDate: LocalDate? = null,
-    @Serializable(LocalDateComponentSerializer::class)
+    @Serializable(SubsonicDatePolymorphicSerializer::class)
     val releaseDate: LocalDate? = null,
     val recordLabels: List<RecordLabel> = emptyList(),
     val releaseTypes: List<String> = emptyList(),
