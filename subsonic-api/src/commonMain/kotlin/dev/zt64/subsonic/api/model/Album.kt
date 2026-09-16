@@ -4,7 +4,6 @@ import dev.zt64.subsonic.api.model.serializer.GenresSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDatePolymorphicSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.serializers.LocalDateComponentSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration

@@ -18,11 +18,10 @@ import kotlinx.serialization.json.jsonPrimitive
 
 internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSerializer<LocalDate>(LocalDate::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<LocalDate> {
-        try {
-            element.jsonObject
-            return SubsonicDateSerializer
+        return try {
+            SubsonicDateSerializer
         } catch (_: IllegalArgumentException) {
-            return NavidromeDateSerializer
+            NavidromeDateSerializer
         }
     }
 
