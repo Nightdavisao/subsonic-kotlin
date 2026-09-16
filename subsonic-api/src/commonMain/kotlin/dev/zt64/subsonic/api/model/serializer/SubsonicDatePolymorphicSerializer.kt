@@ -11,6 +11,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
@@ -18,10 +20,10 @@ import kotlinx.serialization.json.jsonPrimitive
 
 internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSerializer<LocalDate>(LocalDate::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<LocalDate> {
-        return try {
-            SubsonicDateSerializer
-        } catch (_: IllegalArgumentException) {
-            NavidromeDateSerializer
+        return when (element) {
+            is JsonPrimitive -> SubsonicDateSerializer
+            is JsonObject -> NavidromeDateSerializer
+            else -> SubsonicDateSerializer
         }
     }
 
@@ -49,11 +51,12 @@ internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSeriali
         }
 
         override fun deserialize(decoder: Decoder): LocalDate {
-            val value = decoder.decodeSerializableValue(JsonElement.serializer()).jsonObject
+            val value = decoder.decodeSerializableValue(JsonObject.serializer())
+
             return LocalDate(
-                value["year"]?.jsonPrimitive?.intOrNull ?: -1,
-                value["month"]?.jsonPrimitive?.intOrNull ?: -1,
-                value["day"]?.jsonPrimitive?.intOrNull ?: -1,
+                value["year"]?.jsonPrimitive?.intOrNull ?: 1,
+                value["month"]?.jsonPrimitive?.intOrNull ?: 1,
+                value["day"]?.jsonPrimitive?.intOrNull ?: 1,
             )
         }
     }
