@@ -4,21 +4,14 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.serializers.FormattedLocalDateSerializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonContentPolymorphicSerializer
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.intOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.*
 
-internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSerializer<LocalDate>(LocalDate::class) {
+internal object SubsonicDatePolymorphicSerializer :
+    JsonContentPolymorphicSerializer<LocalDate>(LocalDate::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<LocalDate> {
         return when (element) {
             is JsonPrimitive -> SubsonicDateSerializer
