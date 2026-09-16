@@ -12,6 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.int
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -51,9 +52,9 @@ internal object SubsonicDatePolymorphicSerializer: JsonContentPolymorphicSeriali
         override fun deserialize(decoder: Decoder): LocalDate {
             val value = decoder.decodeSerializableValue(JsonElement.serializer()).jsonObject
             return LocalDate(
-                value["year"]?.jsonPrimitive?.int ?: 2000,
-                value["month"]?.jsonPrimitive?.int ?: 1,
-                value["day"]?.jsonPrimitive?.int ?: 1,
+                value["year"]?.jsonPrimitive?.intOrNull ?: -1,
+                value["month"]?.jsonPrimitive?.intOrNull ?: -1,
+                value["day"]?.jsonPrimitive?.intOrNull ?: -1,
             )
         }
     }
