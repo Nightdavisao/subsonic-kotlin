@@ -2,10 +2,13 @@ package dev.zt64.subsonic.client
 
 import dev.zt64.subsonic.api.SubsonicApi
 import dev.zt64.subsonic.api.SubsonicApiImpl
+import dev.zt64.subsonic.api.model.SubsonicException
+import dev.zt64.subsonic.api.model.SubsonicResponse
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -20,7 +23,7 @@ private const val CLIENT_NAME = "subsonic-kotlin"
  * Based off Open Subsonic API
  */
 public class SubsonicClient(
-    private val httpClient: HttpClient,
+    public val httpClient: HttpClient,
     private val json: Json,
     private val baseUrl: String,
     private val params: Map<String, String>
@@ -72,6 +75,34 @@ public class SubsonicClient(
                 }
 
                 clientConfig()
+
+                /**
+                 * this validator shouldn't care if the status code is 2xx or 3xx, we'll be validating against the response anyway
+                 * this is a workaround for the stream endpoint returning 200 with an error body
+                 **/
+                HttpResponseValidator {
+                    validateResponse { response ->
+                        val contentType = response.headers["content-type"]
+
+                        if (contentType == ContentType.Application.Json.contentType) {
+                            try {
+                                val subsonicResponse =
+                                    Json.decodeFromString<SubsonicResponse<Any>>(response.bodyAsText())
+
+                                if (subsonicResponse is SubsonicResponse.Error) {
+                                    // something has gone wrong with request, throw an error immediately
+                                    throw SubsonicException(
+                                        subsonicResponse.error.message,
+                                        subsonicResponse.error.code
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                if (e is SubsonicException) throw e
+                                // probably not our business, let something else handle the exception
+                            }
+                        }
+                    }
+                }
             }
 
             val httpClient = if (engine != null) {
