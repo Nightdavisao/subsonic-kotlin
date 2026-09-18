@@ -45,10 +45,7 @@ jobs:
         run: |
           base="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
           base="${base%-SNAPSHOT}"
-          branch="${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref_name }}"
-          sha="${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}"
-          branch="${branch//\//-}"
-          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-${branch}.${GITHUB_RUN_NUMBER}-${sha::8}-SNAPSHOT" >> "$GITHUB_ENV"
+          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-SNAPSHOT" >> "$GITHUB_ENV"
 
       - name: Build and publish to Maven
         env:
