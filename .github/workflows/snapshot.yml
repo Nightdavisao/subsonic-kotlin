@@ -1,18 +1,29 @@
 name: Publish snapshot
-run-name: Publish snapshot ${{ github.ref_name }} @ ${{ github.sha }}
+run-name: ${{ github.event.workflow_run.head_commit.message || github.event.head_commit.message || format('Snapshot {0}', github.ref_name) }}
 
 on:
   workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: [ Check ]
+    types: [ completed ]
 
 jobs:
   publish:
     name: "Publish snapshot"
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_repository.full_name == github.repository
+      )
     timeout-minutes: 60
     runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup JDK
         uses: actions/setup-java@v6
@@ -34,8 +45,10 @@ jobs:
         run: |
           base="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
           base="${base%-SNAPSHOT}"
-          branch="${GITHUB_REF_NAME//\//-}"
-          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-${branch}.${GITHUB_RUN_NUMBER}-${GITHUB_SHA::8}-SNAPSHOT" >> "$GITHUB_ENV"
+          branch="${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref_name }}"
+          sha="${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}"
+          branch="${branch//\//-}"
+          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-${branch}.${GITHUB_RUN_NUMBER}-${sha::8}-SNAPSHOT" >> "$GITHUB_ENV"
 
       - name: Build and publish to Maven
         env:
