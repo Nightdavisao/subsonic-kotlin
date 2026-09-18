@@ -19,7 +19,7 @@ import kotlin.time.Instant
 @Serializable
 public sealed interface SongCollection {
     public val id: String
-    public val name: String
+    public val name: String?
 
     @SerialName("coverArt")
     public val coverArtId: String?
