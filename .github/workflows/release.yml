@@ -1,5 +1,5 @@
 name: Publish release
-run-name: Publish release ${{ github.event.release.tag_name }}
+run-name: Publish release ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
@@ -14,18 +14,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.release.tag_name }}
 
-      - name: Test version
-        id: version
+      - name: Validate release version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          version=$(cat lib/build.gradle.kts | grep -E 'version = "' | cut -d \" -f 2)
-          if git show-ref --tags --quiet --verify -- "refs/tags/$version" >/dev/null; then
-            echo "Git tag $version already exists, failing to publish";
+          version="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
+
+          if [[ "$version" == *-SNAPSHOT ]]; then
+            echo "Release build requires VERSION_NAME without -SNAPSHOT, got: $version"
             exit 1
-          else
-            echo "release_tag=$version" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ "$EVENT_NAME" == "release" && "$version" != "$RELEASE_TAG" ]]; then
+            echo "VERSION_NAME ($version) must match release tag ($RELEASE_TAG)"
+            exit 1
           fi
 
       - name: Setup JDK
