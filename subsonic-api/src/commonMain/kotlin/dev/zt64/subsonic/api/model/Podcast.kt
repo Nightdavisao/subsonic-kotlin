@@ -41,16 +41,16 @@ public enum class PodcastStatus {
 @Serializable
 public data class PodcastChannel internal constructor(
     val id: String,
-    val title: String,
+    val title: String? = null,
     val url: String,
-    val description: String,
+    val description: String? = null,
     @SerialName("coverArt")
     val coverArtId: String? = null,
     val originalImageUrl: String? = null,
     val status: PodcastStatus,
     val errorMessage: String? = null,
     @SerialName("episode")
-    val episodes: List<PodcastEpisode>
+    val episodes: List<PodcastEpisode> = emptyList()
 )
 
 /**
@@ -68,13 +68,13 @@ public data class PodcastChannel internal constructor(
 @Serializable
 public data class PodcastEpisode internal constructor(
     override val id: String,
-    val streamId: String,
+    val streamId: String? = null,
     val channelId: String,
     val description: String? = null,
     @SerialName("coverArt")
     override val coverArtId: String? = null,
     val status: PodcastStatus,
-    val publishDate: Instant,
+    val publishDate: Instant? = null,
     @SerialName("starred")
     override val starredAt: Instant? = null,
     override val musicBrainzId: String? = null,

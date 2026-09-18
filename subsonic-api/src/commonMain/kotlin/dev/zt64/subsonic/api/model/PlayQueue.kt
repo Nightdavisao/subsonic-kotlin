@@ -16,7 +16,8 @@ import kotlin.time.Instant
  */
 @Serializable
 public data class PlayQueue internal constructor(
-    val currentId: String,
+    @SerialName("current")
+    val currentId: String? = null,
     val position: Long = 0,
     val username: String,
     @SerialName("changed")

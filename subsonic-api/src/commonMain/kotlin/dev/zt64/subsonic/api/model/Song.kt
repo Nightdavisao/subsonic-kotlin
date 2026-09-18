@@ -55,7 +55,7 @@ public data class Song internal constructor(
     override val id: String,
     val title: String,
     @SerialName("artist")
-    val artistName: String,
+    val artistName: String? = null,
     val artistId: String? = null,
     val artists: List<SongArtist> = emptyList(),
     val albumArtists: List<SongArtist> = emptyList(),
@@ -98,9 +98,9 @@ public data class Song internal constructor(
     @SerialName("size")
     val fileSize: Long? = null,
     @SerialName("suffix")
-    val fileExtension: String,
+    val fileExtension: String? = null,
     @SerialName("contentType")
-    val mimeType: String,
+    val mimeType: String? = null,
     @SerialName("path")
     val filePath: String? = null,
     val works: List<Work> = emptyList(),
@@ -177,8 +177,8 @@ public data class Song internal constructor(
     @Serializable
     public data class Movement(
         val name: String,
-        val number: Int,
-        val count: Int
+        val number: Int? = null,
+        val count: Int? = null
     )
 }
 

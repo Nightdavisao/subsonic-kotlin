@@ -21,12 +21,12 @@ import kotlin.time.Instant
 public data class Share internal constructor(
     val id: String,
     val url: String,
-    val description: String,
+    val description: String? = null,
     val username: String,
     @SerialName("created")
     val createdAt: Instant,
     @SerialName("expires")
-    val expiresAt: Instant,
+    val expiresAt: Instant? = null,
     val lastVisited: Instant? = null,
     val visitCount: Int = 0,
     @SerialName("entry")

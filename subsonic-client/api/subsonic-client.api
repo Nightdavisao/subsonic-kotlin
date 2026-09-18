@@ -76,6 +76,7 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getDirectories (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getDirectory (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getGenres (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getHttpClient ()Lio/ktor/client/HttpClient;
 	public fun getIndexes (Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getInternetRadioStations (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getLicense (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -105,7 +106,7 @@ public final class dev/zt64/subsonic/client/SubsonicClient : dev/zt64/subsonic/a
 	public fun getStreamUrl (Ljava/lang/String;ILjava/lang/String;Ljava/lang/Integer;Z)Ljava/lang/String;
 	public fun getTopSongs (Ldev/zt64/subsonic/api/model/Artist;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTopSongs (Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun getTranscodeDecision (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getTranscodeDecision (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;Ldev/zt64/subsonic/api/model/ClientInfo;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getTranscodeStream (Ljava/lang/String;Ldev/zt64/subsonic/api/model/MediaType;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getUser (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

@@ -46,7 +46,7 @@ public data class Album internal constructor(
     override val id: String,
     override val name: String,
     @SerialName("artist")
-    val artistName: String,
+    val artistName: String? = null,
     val artistId: String? = null,
     val artists: List<Artist> = emptyList(),
     val displayArtist: String? = null,

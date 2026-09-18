@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ScanStatus internal constructor(
     val scanning: Boolean,
-    val count: Int
+    val count: Int = 0
 )
