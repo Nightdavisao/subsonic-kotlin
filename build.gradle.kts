@@ -5,5 +5,5 @@ plugins {
 
 allprojects {
     group = "dev.zt64.subsonic"
-    version = "1.0.0-beta08"
+    version = providers.gradleProperty("VERSION_NAME").orElse("0.0.0-local").get()
 }

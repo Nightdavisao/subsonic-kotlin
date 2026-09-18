@@ -1,0 +1,46 @@
+name: Publish snapshot
+run-name: Publish snapshot ${{ github.ref_name }} @ ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  publish:
+    name: "Publish snapshot"
+    timeout-minutes: 60
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Cache konan directory
+        uses: actions/cache@v6
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('**/build.gradle.kts') }}
+          restore-keys: "${{ runner.os }}-konan-"
+
+      - name: Compute snapshot version
+        run: |
+          base="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
+          base="${base%-SNAPSHOT}"
+          branch="${GITHUB_REF_NAME//\//-}"
+          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-${branch}.${GITHUB_RUN_NUMBER}-${GITHUB_SHA::8}-SNAPSHOT" >> "$GITHUB_ENV"
+
+      - name: Build and publish to Maven
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+        run: ./gradlew publishAllPublicationsToMavenCentral --no-configuration-cache --stacktrace
