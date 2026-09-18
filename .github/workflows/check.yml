@@ -7,7 +7,7 @@ on:
       - '**.kt'
       - '**.kts'
       - 'gradle.properties'
-      - '.github/workflows/check.yml'
+      - '.github/workflows/*.yml'
       - 'gradle/**'
       - 'kotlin-js-store/**'
   pull_request:
@@ -16,7 +16,7 @@ on:
       - '**.kt'
       - '**.kts'
       - 'gradle.properties'
-      - '.github/workflows/check.yml'
+      - '.github/workflows/*.yml'
       - 'gradle/**'
       - 'kotlin-js-store/**'
   workflow_dispatch:
