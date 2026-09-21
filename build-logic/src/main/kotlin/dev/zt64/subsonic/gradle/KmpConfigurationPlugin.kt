@@ -20,6 +20,7 @@ private fun <T : Any> Property<T>.assign(value: T) = set(value)
 private val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+@Suppress("unused")
 fun Project.publish(
     artifactId: String,
     block: MavenPublishBaseExtension.() -> Unit = {}
@@ -29,7 +30,6 @@ fun Project.publish(
     val path = "zt64/subsonic-kotlin"
 
     extensions.configure<MavenPublishBaseExtension> {
-        coordinates("dev.zt64.subsonic", artifactId, version.toString())
         publishToMavenCentral()
 
         val hasSigningKey = providers

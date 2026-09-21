@@ -1,36 +1,29 @@
-name: Publish release
-run-name: Publish release ${{ github.ref_name }}
+name: Publish snapshot
+run-name: ${{ github.event.workflow_run.head_commit.message || github.event.head_commit.message || format('Snapshot {0}', github.ref_name) }}
 
 on:
   workflow_dispatch:
-  release:
-    types: [ prereleased, released ]
+  workflow_run:
+    workflows: [ Check ]
+    types: [ completed ]
 
 jobs:
   publish:
-    name: "Publish release"
+    name: "Publish snapshot"
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_repository.full_name == github.repository
+      )
     timeout-minutes: 60
     runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
-      - name: Validate release version
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: |
-          version="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
-
-          if [[ "$version" == *-SNAPSHOT ]]; then
-            echo "Release build requires VERSION_NAME without -SNAPSHOT, got: $version"
-            exit 1
-          fi
-
-          if [[ "$EVENT_NAME" == "release" && "$version" != "$RELEASE_TAG" ]]; then
-            echo "VERSION_NAME ($version) must match release tag ($RELEASE_TAG)"
-            exit 1
-          fi
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup JDK
         uses: actions/setup-java@v6
@@ -48,7 +41,13 @@ jobs:
           key: ${{ runner.os }}-konan-${{ hashFiles('**/build.gradle.kts') }}
           restore-keys: "${{ runner.os }}-konan-"
 
-      - name: Build and Maven publish
+      - name: Compute snapshot version
+        run: |
+          base="$(grep '^VERSION_NAME=' gradle.properties | cut -d= -f2)"
+          base="${base%-SNAPSHOT}"
+          echo "ORG_GRADLE_PROJECT_VERSION_NAME=${base}-SNAPSHOT" >> "$GITHUB_ENV"
+
+      - name: Build and publish to Maven
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
