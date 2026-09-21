@@ -842,7 +842,11 @@ internal class SubsonicApiImpl(
         return getBody("startScan")
     }
 
-    override suspend fun getTranscodeDecision(id: String, mediaType: MediaType, clientInfo: ClientInfo): TranscodeDecision {
+    override suspend fun getTranscodeDecision(
+        id: String,
+        mediaType: MediaType,
+        clientInfo: ClientInfo
+    ): TranscodeDecision {
         return getBody("getTranscodeDecision") {
             method = HttpMethod.Post // this MUST be a POST request
             parameter("id", id)

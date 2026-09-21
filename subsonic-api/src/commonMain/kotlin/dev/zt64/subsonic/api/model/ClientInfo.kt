@@ -89,9 +89,8 @@ public data class ClientInfo(
                 AudioSampleRate,
 
                 @SerialName("audioBitdepth")
-                AudioBitDepth,
+                AudioBitDepth
             }
-
         }
     }
 
