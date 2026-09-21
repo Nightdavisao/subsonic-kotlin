@@ -15,13 +15,13 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ClientInfo(
-    val codecProfiles: List<CodecProfile>,
-    val directPlayProfiles: List<DirectPlayProfile>,
-    val maxAudioBitrate: Int = 0,
-    val maxTranscodingAudioBitrate: Int = 0,
     val name: String,
     val platform: String,
-    val transcodingProfiles: List<TranscodingProfile>
+    val maxAudioBitrate: Int = 0,
+    val maxTranscodingAudioBitrate: Int = 0,
+    val codecProfiles: List<CodecProfile> = emptyList(),
+    val directPlayProfiles: List<DirectPlayProfile> = emptyList(),
+    val transcodingProfiles: List<TranscodingProfile> = emptyList()
 ) {
     @Serializable
     public enum class CodecType {
@@ -29,32 +29,15 @@ public data class ClientInfo(
     }
 
     @Serializable
-    public enum class LimitationComparison {
-        Equals,
-        NotEquals,
-        LessThanEqual,
-        GreaterThanEqual
-    }
-
-    @Serializable
-    public enum class LimitationName {
-        @SerialName("audioChannels")
-        AudioChannels,
-        @SerialName("audioBitrate")
-        AudioBitrate,
-        @SerialName("audioProfile")
-        AudioProfile,
-        @SerialName("audioSamplerate")
-        AudioSampleRate,
-        @SerialName("audioBitdepth")
-        AudioBitDepth,
-    }
-
-    @Serializable
     public enum class Protocol {
-        @SerialName("http") HTTP,
-        @SerialName("https") HTTPS,
-        @SerialName("hls") HLS
+        @SerialName("http")
+        HTTP,
+
+        @SerialName("https")
+        HTTPS,
+
+        @SerialName("hls")
+        HLS
     }
 
     /**
@@ -78,12 +61,40 @@ public data class ClientInfo(
          */
         @Serializable
         public data class Limitation(
-            val comparison: LimitationComparison,
-            val name: LimitationName,
+            val comparison: Comparison,
+            val name: Type,
             val required: Boolean = true,
             val values: List<String>
-        )
+        ) {
+            @Serializable
+            public enum class Comparison {
+                Equals,
+                NotEquals,
+                LessThanEqual,
+                GreaterThanEqual
+            }
+
+            @Serializable
+            public enum class Type {
+                @SerialName("audioChannels")
+                AudioChannels,
+
+                @SerialName("audioBitrate")
+                AudioBitrate,
+
+                @SerialName("audioProfile")
+                AudioProfile,
+
+                @SerialName("audioSamplerate")
+                AudioSampleRate,
+
+                @SerialName("audioBitdepth")
+                AudioBitDepth,
+            }
+
+        }
     }
+
     /**
      * Transcoding profile
      * @property audioCodec Audio codec
@@ -95,8 +106,8 @@ public data class ClientInfo(
     public data class TranscodingProfile(
         val audioCodec: String,
         val container: String,
-        val maxAudioChannels: Int,
-        val protocol: Protocol
+        val protocol: Protocol,
+        val maxAudioChannels: Int? = null
     )
 
     /**
@@ -109,8 +120,8 @@ public data class ClientInfo(
     @Serializable
     public data class DirectPlayProfile(
         val audioCodecs: List<String>,
-        val containers: List<String> = emptyList(),
-        val maxAudioChannels: Int? = null,
-        val protocols: List<Protocol>
+        val protocols: List<Protocol>,
+        val containers: List<String>,
+        val maxAudioChannels: Int? = null
     )
 }
