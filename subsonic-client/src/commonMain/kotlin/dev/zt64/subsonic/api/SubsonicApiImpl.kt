@@ -550,10 +550,10 @@ internal class SubsonicApiImpl(
         return buildUrl(
             "rest/getTranscodeStream",
             buildMap {
-                put("id", id)
+                put("mediaId", id)
                 put("mediaType", mediaType.name.lowercase())
                 put("offset", offset.toString())
-                put("params", params)
+                put("transcodeParams", params)
             }
         )
     }
