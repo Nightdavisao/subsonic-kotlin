@@ -854,8 +854,8 @@ internal class SubsonicApiImpl(
     ): TranscodeDecision {
         return getBody("getTranscodeDecision") {
             method = HttpMethod.Post // this MUST be a POST request
-            parameter("id", id)
-            parameter("mediaType", mediaType)
+            parameter("mediaId", id)
+            parameter("mediaType", mediaType.name.lowercase())
             setBody(clientInfo)
             contentType(ContentType.Application.Json)
         }
