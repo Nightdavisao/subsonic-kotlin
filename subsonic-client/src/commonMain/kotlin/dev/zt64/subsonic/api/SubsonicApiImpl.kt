@@ -42,7 +42,10 @@ internal class SubsonicApiImpl(
         endpoint: String,
         builder: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse {
-        val res = httpClient.get("$endpoint.view", builder)
+        val res = httpClient.request("$endpoint.view") {
+            method = HttpMethod.Get
+            builder()
+        }
 
         when (res.status) {
             HttpStatusCode.Gone -> throw SubsonicException(
