@@ -541,6 +541,23 @@ internal class SubsonicApiImpl(
         )
     }
 
+    override fun getTranscodeStreamUrl(
+        id: String,
+        mediaType: MediaType,
+        offset: Int,
+        params: String
+    ): String {
+        return buildUrl(
+            "rest/getTranscodeStream",
+            buildMap {
+                put("id", id)
+                put("mediaType", mediaType.name.lowercase())
+                put("offset", offset.toString())
+                put("params", params)
+            }
+        )
+    }
+
     override suspend fun download(id: String): ByteReadChannel {
         // TODO: parse using subsonic response which is used for errors
         return httpClient.get("download") {
