@@ -545,7 +545,7 @@ internal class SubsonicApiImpl(
         id: String,
         mediaType: MediaType,
         offset: Int,
-        params: String
+        transcodeParams: String
     ): String {
         return buildUrl(
             "rest/getTranscodeStream",
@@ -553,7 +553,7 @@ internal class SubsonicApiImpl(
                 put("mediaId", id)
                 put("mediaType", mediaType.name.lowercase())
                 put("offset", offset.toString())
-                put("transcodeParams", params)
+                put("transcodeParams", transcodeParams)
             }
         )
     }
