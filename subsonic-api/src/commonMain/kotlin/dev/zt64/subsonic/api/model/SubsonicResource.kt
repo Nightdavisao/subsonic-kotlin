@@ -1,5 +1,6 @@
 package dev.zt64.subsonic.api.model
 
+import dev.zt64.subsonic.api.model.serializer.safe.InstantSafeSerializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -23,6 +24,8 @@ import kotlin.time.Instant
 public sealed interface SubsonicResource {
     public val id: String
     public val coverArtId: String?
+
+    @Serializable(with = InstantSafeSerializer::class)
     public val starredAt: Instant?
     public val musicBrainzId: String?
     public val isExternal: Boolean

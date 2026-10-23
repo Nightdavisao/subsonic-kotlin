@@ -2,6 +2,7 @@ package dev.zt64.subsonic.api.model
 
 import dev.zt64.subsonic.api.model.serializer.GenresSerializer
 import dev.zt64.subsonic.api.model.serializer.SubsonicDurationSerializer
+import dev.zt64.subsonic.api.model.serializer.safe.InstantSafeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -57,10 +58,13 @@ public data class Album internal constructor(
     val moods: List<String> = emptyList(),
     @Serializable(SubsonicDurationSerializer::class)
     override val duration: Duration?,
+    @Serializable(with = InstantSafeSerializer::class)
     @SerialName("created")
     val createdAt: Instant,
+    @Serializable(with = InstantSafeSerializer::class)
     @SerialName("starred")
     override val starredAt: Instant?,
+    @Serializable(with = InstantSafeSerializer::class)
     @SerialName("played")
     val lastPlayedAt: Instant?,
     val playCount: Int = 0,
