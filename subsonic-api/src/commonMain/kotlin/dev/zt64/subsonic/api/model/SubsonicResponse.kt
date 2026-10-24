@@ -54,6 +54,7 @@ internal class SubsonicResponseSerializer<T : Any>(
                 else -> JsonArray(emptyList())
             }
         } else {
+            // This normalizes fields that are blank/empty by making them null
             dataEntry.value.takeIf { v ->
                 val content = v.takeIf { it is JsonPrimitive }?.jsonPrimitive?.contentOrNull
                 content == null || (content.isNotBlank() && content.isNotEmpty())
