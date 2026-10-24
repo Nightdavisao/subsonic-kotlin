@@ -56,7 +56,7 @@ internal class SubsonicResponseSerializer<T : Any>(
         } else {
             dataEntry.value.takeIf { v ->
                 val content = v.takeIf { it is JsonPrimitive }?.jsonPrimitive?.contentOrNull
-                (!content.isNullOrBlank() && content.isNotEmpty())
+                content == null || (content.isNotBlank() && content.isNotEmpty())
             } ?: JsonNull
         }
 
