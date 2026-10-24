@@ -12,6 +12,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -53,8 +54,8 @@ internal class SubsonicResponseSerializer<T : Any>(
                 else -> JsonArray(emptyList())
             }
         } else {
-            dataEntry.value.takeIf {
-                val content = it.jsonPrimitive.contentOrNull
+            dataEntry.value.takeIf { v ->
+                val content = v.takeIf { it is JsonPrimitive }?.jsonPrimitive?.contentOrNull
                 (!content.isNullOrBlank() && content.isNotEmpty())
             } ?: JsonNull
         }
