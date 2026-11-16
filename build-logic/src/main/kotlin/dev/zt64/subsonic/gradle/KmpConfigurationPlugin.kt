@@ -139,7 +139,11 @@ class KmpConfigurationPlugin : Plugin<Project> {
     private fun configureMaintenance(target: Project) {
         target.apply {
             plugin("org.jlleitschuh.gradle.ktlint")
-            plugin("org.jetbrains.kotlinx.binary-compatibility-validator")
+            // this uses a Gradle API that is deprecated in 9.x.?
+            // skip it when consumed as a composite build
+            if (target.gradle.parent == null) {
+                plugin("org.jetbrains.kotlinx.binary-compatibility-validator")
+            }
         }
 
         target.configure<KtlintExtension> {
